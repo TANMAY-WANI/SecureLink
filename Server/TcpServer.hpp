@@ -67,6 +67,34 @@ namespace HTTP
         }
         return 0;
     }
+    void TcpServer::listenSocket()
+{
+    if (listen(m_socket, 20) < 0)
+    {
+        exitWithError("Socket listen failed");
+    }
+    std::ostringstream ss;
+    ss << "\n*** Listening on ADDRESS: " 
+        << inet_ntoa(sock_addr.sin_addr) 
+        << " PORT: " << ntohs(sock_addr.sin_port) 
+        << " ***\n\n";
+    log(ss.str());
+}
+void TcpServer::acceptConnection(int &new_socket)
+{
+    new_socket = accept(m_socket, (sockaddr *)& sock_addr, 
+                        &sock_addr_len);
+    if (new_socket < 0)
+    {
+        std::ostringstream ss;
+        ss << 
+        "Server failed to accept incoming connection from ADDRESS: " 
+        << inet_ntoa(sock_addr.sin_addr) << "; PORT: " 
+        << ntohs(sock_addr.sin_port);
+        exitWithError(ss.str());
+    }
+}
+    // int TcpServer::acceptConnection()
 
     int TcpServer::closeServer()
     {

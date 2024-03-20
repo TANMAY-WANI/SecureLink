@@ -27,6 +27,8 @@ namespace HTTP{
                 int startServer();
                 int closeServer();
                 int bindSocket();
+                void listenSocket();
+                void acceptConnection(int &new_socket);
     };
 }
 #endif
